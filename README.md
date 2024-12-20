@@ -87,19 +87,19 @@ ShapeDiver's 3D Viewer offers [features](https://help.shapediver.com/doc/viewer)
 
 First, install the dependencies:
 ```bash
-npm install
+pnpm install
 
 ```
 
 To run the project in development mode use:
 ```bash
-npm start
+pnpm start
 ```
 Then navigate to http://localhost:3000/index.html in a web browser to see the default scene in the viewer.
 
 To build the project for production:
 ```bash
-npm run build
+pnpm build
 ```
 
 ## Integration into existing projects
