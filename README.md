@@ -2,11 +2,11 @@
 
 This repository contains sample code for using the WebGi rendering engine with ShapeDiver. It serves as an example for creating 3D configurators based on the ShapeDiver geometry backend and the WebGi rendering engine. 
 
-You can see a deployed version of this example here: [https://shapediver.github.io/ShapeDiverWebGiIntegration/](https://shapediver.github.io/ShapeDiverWebGiIntegration/). 
+You can see a deployed version of this example here: [https://shapediver.github.io/ShapeDiverIJewel3DIntegration/](https://shapediver.github.io/ShapeDiverIJewel3DIntegration/). 
 
 It's possible to test another ShapeDiver model by adding the following query parameters: 
 
-`https://shapediver.github.io/ShapeDiverWebGiIntegration/?ticket=YOUR_TICKET&modelViewUrl=YOUR_MODEL_VIEW_URL`
+`https://shapediver.github.io/ShapeDiverIJewel3DIntegration/?ticket=YOUR_TICKET&modelViewUrl=YOUR_MODEL_VIEW_URL`
 
 Are you looking for support? Please check out your options for getting in touch with us [here](https://help.shapediver.com/doc/community-and-support). 
 
@@ -64,7 +64,7 @@ You can create WebGi material definitions by using the [iJewel3d playground](htt
 The static material database allows to define materials statically, as part of the web application. You can find an example in [staticMaterialDatabase.ts](src/staticMaterialDatabase.ts). The static material database is a dictionary mapping material names to WebGi material definitions.
 
 ### Dynamic material database
-Optionally you can define a dynamic material database using your Grasshopper model. An example can be found in this Grasshopper model: [materials-json-test.ghx](Grasshopper/materials-json-test.ghx). The dynamic material database is a JSON dictionary mapping material names to WebGi material definitions. 
+Optionally you can define a dynamic material database using your Grasshopper model. An example can be found in this Grasshopper model: [webgitextureexample.ghx](Grasshopper/webgitextureexample.ghx). The dynamic material database is a JSON dictionary mapping material names to WebGi material definitions. 
 
 
 ### Notes about rendering diamonds
@@ -87,19 +87,19 @@ ShapeDiver's 3D Viewer offers [features](https://help.shapediver.com/doc/viewer)
 
 First, install the dependencies:
 ```bash
-npm install
+pnpm install
 
 ```
 
 To run the project in development mode use:
 ```bash
-npm start
+pnpm start
 ```
 Then navigate to http://localhost:3000/index.html in a web browser to see the default scene in the viewer.
 
 To build the project for production:
 ```bash
-npm run build
+pnpm build
 ```
 
 ## Integration into existing projects

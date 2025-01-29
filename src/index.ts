@@ -4,7 +4,7 @@ import { ShapeDiverSessionPlugin } from './ShapeDiverSessionPlugin';
 import { createUi } from '@shapediver/viewer.shared.demo-helper';
 
 const urlParams = new URLSearchParams(window.location.search);
-const TICKET = urlParams.get('ticket') || 'ee1622c04230a13e8632917d16834f2932ed3373e35a461e0a799b877d8e816f1db6168261d152536868ec651bc641e4eb5bd189520c7e9e6204e73f9b027173f09e8fdd87234380bdacb3240bb71ac8217e0e4c5924bb1dc6e75fcf5d0c76df47502202094bb4-5a7f2add154eb6589385a5718804ce39';
+const TICKET = urlParams.get('ticket') || '1ca6e2bdebbcf437e1b5085ae397b2afeb6c8b0794456b3bc00c996b6a97e67e0b46ecd880b0f8af7bcfc4d2ca3fc3bf964f06423d88629da0dd0bec9b9ebd2e8f263f41da6e8c8d27f63ad039731b7343d5b77d934687ae1345cc15d0832a6a3ab396b4c27113-905a8b8fe96f369837bd5e94279ed2ad';
 const MODEL_VIEW_URL = urlParams.get('modelViewUrl') || 'https://sdr8euc1.eu-central-1.shapediver.com';
 const scene = urlParams.get('webgiScene');
 const key = urlParams.get('webgiDiamondPlugin');
