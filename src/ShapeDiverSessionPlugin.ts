@@ -1,4 +1,4 @@
-import { AViewerPlugin, DiamondPlugin, IModel, LoadingScreenPlugin, MathUtils, Mesh, MeshStandardMaterial2, ViewerApp } from 'webgi';
+import { AViewerPlugin, DiamondPlugin, IModel, LoadingScreenPlugin, MathUtils, Mesh, MeshStandardMaterial2, Sphere, ViewerApp } from 'webgi';
 import { addListener, createSession, EventResponseMapping, EVENTTYPE_TASK, IEvent, ISessionApi, ITreeNode, removeListener, SessionCreationDefinition, SessionOutputData, ShapeDiverResponseOutputContent, TASK_TYPE } from '@shapediver/viewer.session';
 import { staticMaterialDatabase } from './staticMaterialDatabase';
 
@@ -97,7 +97,7 @@ export class ShapeDiverSessionPlugin extends AViewerPlugin<''> {
          * This callback is called when the session is updated.
          * More information about the updateCallback can be found here: https://viewer.shapediver.com/v3/latest/api/interfaces/ISessionApi.html#updateCallback
          */
-        this._session.updateCallback = (newNode?: ITreeNode) => {
+        this._session.updateCallback = async (newNode?: ITreeNode) => {
             if (!newNode || !this._session) return;
 
             // first, search for the MaterialDatabase output and update the dynamicMaterialDatabase
@@ -147,7 +147,7 @@ export class ShapeDiverSessionPlugin extends AViewerPlugin<''> {
                     switch (item.format) {
                         case 'gltf':
                         case 'glb':
-                            this.loadGlbContent(outputApi.name, outputApi.uid, item, i);
+                            await this.loadGlbContent(outputApi.name, outputApi.uid, item, i);
                     }
                 }
 
@@ -158,9 +158,25 @@ export class ShapeDiverSessionPlugin extends AViewerPlugin<''> {
             // enable rendering again
             if (this._viewer) this._viewer.renderEnabled = true;
 
+            
+            // scale the model to fit the viewport
+            if (viewer) {
+                viewer.scene.modelRoot.scale.setScalar(1);
+                // get the bounding sphere of the model
+                const modelBounds = viewer.scene.getModelBounds();
+                const boundingSphere = new Sphere();
+                modelBounds.getBoundingSphere(boundingSphere);
+                // set the right scalar for the model root
+                const scale = 2 / boundingSphere.radius;
+                viewer.scene.modelRoot.scale.setScalar(scale);
+                viewer.scene.setDirty();
+
+                viewer.fitToView();
+            }
+
         };
         // call the callback once to initialize the models
-        this._session.updateCallback(this._session.node, this._session.node);
+        await this._session.updateCallback(this._session.node, this._session.node);
 
         // enable the plugin once the session is created
         this._enabled = true;
@@ -244,12 +260,27 @@ export class ShapeDiverSessionPlugin extends AViewerPlugin<''> {
 
         if (materialType === 'DiamondMaterial') {
             // Regarding the DiamondPlugin, please read more here: https://webgi.xyz/docs/industries/jewellery/index.html
-            const file = new File([JSON.stringify(definition)], child.material.name + '.dmat', { type: 'application/json', });
-            const material = await viewer.load({file: file, path: child.material.name + '.dmat'});
+            const file = new File(
+                [JSON.stringify(definition)],
+                child.material.name + '.dmat',
+                {type: 'application/json'},
+            );
+            const material = await viewer.load({
+                file: file,
+                path: child.material.name + '.dmat',
+            });
+            material.name = child.material.name;
             (child as any).setMaterial(material);
         } else if (materialType === 'MeshStandardMaterial2') {
-            const file = new File([JSON.stringify(definition)], child.material.name + '.pmat', { type: 'application/json', });
-            const material = await viewer.load({file: file, path: child.material.name + '.pmat'});
+            const file = new File(
+                [JSON.stringify(definition)],
+                child.material.name + '.pmat',
+                {type: 'application/json'},
+            );
+            const material = await viewer.load({
+                file: file,
+                path: child.material.name + '.pmat',
+            });
             (child as any).setMaterial(material);
         }
     }
@@ -294,8 +325,6 @@ export class ShapeDiverSessionPlugin extends AViewerPlugin<''> {
 
         // apply the material
         await this.applyMaterial(viewer, ms);
-
-        return viewer.fitToView();
     }
 
     // #endregion Private Methods (3)
